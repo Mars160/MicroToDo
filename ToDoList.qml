@@ -32,12 +32,11 @@ BackgroundRectangle {
             }
         )
 
-        let val = JSON.stringify(tasks)
-        storage.set(key, val)
+        storage.task().set(tasks, taskListID)
     }
 
     Component.onCompleted: {
-        let val = storage.get(key, "o")
+        let val = storage.task().get(taskListID, true)
         if (val !== null) {
             tasks = val
         }

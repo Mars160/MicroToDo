@@ -125,6 +125,8 @@ BackgroundRectangle {
                     width: root.width / 2
                     height: root.height / 2
 
+
+
                     BackgroundRectangle{
                         anchors.fill: parent
 
@@ -138,11 +140,12 @@ BackgroundRectangle {
                                     onCheckedChanged: {
                                         if(checked) {
                                             myUI.hideTabsID.delete(modelData.Id)
+                                            storage.hideList().remove(modelData.Id)
                                         } else {
                                             myUI.hideTabsID.add(modelData.Id)
+                                            storage.hideList().add(modelData.Id)
                                         }
                                         myUI.filterTabs()
-                                        storage.set("hideTabsID", JSON.stringify([...myUI.hideTabsID]))
                                     }
                                 }
                             }

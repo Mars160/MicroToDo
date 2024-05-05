@@ -132,6 +132,23 @@ Item {
         )
     }
 
+    function getListsDelta(link = null, onsuccess = null, onerror = null) {
+        let url;
+        if(link !== null) {
+            url = link
+        } else {
+            url = baseUrl + "/lists/delta"
+        }
+        request(
+            "GET",
+            url,
+            null,
+            null,
+            onsuccess,
+            onerror,
+        )
+    }
+
     function getTasks(Id, onsuccess = null, onerror = null) {
         request(
             "GET",

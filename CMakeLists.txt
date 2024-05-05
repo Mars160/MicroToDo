@@ -7,6 +7,11 @@ set(QT_PREFIX_PATH "C:/Qt/6.7.0/mingw_64")
 
 set(CMAKE_PREFIX_PATH ${QT_PREFIX_PATH}/lib/cmake)
 
+MESSAGE( STATUS "this var key = ${CMAKE_BUILD_TYPE}.")
+if (CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+endif()
+
 find_package(Qt6 6.5 REQUIRED COMPONENTS Quick HttpServer Gui Widgets)
 
 qt_standard_project_setup(REQUIRES 6.5)

@@ -8,7 +8,7 @@ Rectangle {
     property var alllists: []
     property var tabs: []
 
-    property var hideTabsID: null
+    property var hideTabsID: new Set()
 
     property var bgColor: Qt.rgba(0, 0, 0, 0)
     property var textColor: Qt.rgba(1, 1, 1, 1)
@@ -90,10 +90,8 @@ Rectangle {
 
     function refreshTabs(init = false) {
         if(init) {
-            let oldTabs = storage.get("tabs")
-            let oldTabsJson = JSON.parse(oldTabs)
-            tabs = oldTabsJson
-            console.log("tabs", oldTabs)
+            alllists = storage.taskList().get()
+            filterTabs()
             return
         }
 
@@ -114,7 +112,7 @@ Rectangle {
                 }
             })
             alllists = newTabs
-            storage.set("list", JSON.stringify(newTabs))
+            storage.taskList().set(newTabs)
             filterTabs()
         })
     }
@@ -122,18 +120,14 @@ Rectangle {
     function filterTabs(tabid = null) {
         if(tabid === null) {
             let newTabs = []
-            let oldTabs = storage.get("tabs")
+            let oldTabs = storage.taskList().get()
             alllists.forEach((val) => {
                 if (!hideTabsID.has(val.Id)) {
                     newTabs.push(val)
                 }
             })
 
-            let newTabsStr = JSON.stringify(newTabs)
-            if(oldTabs !== newTabsStr) {
-                tabs = newTabs
-                storage.set("tabs", newTabsStr)
-            }
+            tabs = newTabs
         }
     }
 
@@ -144,9 +138,13 @@ Rectangle {
             storage.set("bgColor", "#00000000")
             storage.set("textColor", "#ffffffff")
         } else {
-            let hids = storage.get("hideTabsID", "o")
+            //let hids = storage.get("hideTabsID", "o")
+            let hids = storage.hideList().get()
             if(hids !== null) {
-                myUI.hideTabsID = new Set(hids)
+                myUI.hideTabsID = new Set()
+                hids.forEach((val) => {
+                    myUI.hideTabsID.add(val)
+                })
             }
 
             refreshTabs(true)
@@ -156,7 +154,7 @@ Rectangle {
             if (bg !== null) root.realbg = bg
             if (tc !== null) textColor = tc
 
-            let lists = storage.get("list", "o")
+            let lists = storage.taskList().get()
             if (lists !== null) alllists = lists
 
             syncTimer.interval = 10000;
