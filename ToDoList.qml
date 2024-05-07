@@ -28,7 +28,7 @@ BackgroundRectangle {
                             "Id": val.id
                         })
                 })
-                tasks = newTask
+                tasks = newTask.reverse()
             }
         )
 
